@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>고객 상담 | IAN SHOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    // 텔레그램 WebApp 강제 확장 (모바일 최적화)
+    (function() {
+      function forceExpand() {
+        if (window.Telegram && window.Telegram.WebApp) {
+          try {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            if (window.Telegram.WebApp.viewportHeight) {
+              window.Telegram.WebApp.expand();
+            }
+          } catch (e) {
+            console.error('텔레그램 WebApp 확장 오류:', e);
+          }
+        }
+      }
+      forceExpand();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', forceExpand);
+      }
+      setTimeout(forceExpand, 100);
+      setTimeout(forceExpand, 500);
+      window.addEventListener('load', forceExpand);
+    })();
+  </script>
+</head>
+<body>
+
+<h1>💬 고객 상담</h1>
+
+<a href="index.html"><button>🏠 메인 화면으로</button></a>
+
+<hr>
+
+<!-- FAQ 섹션 -->
+<div class="faq-section">
+  <h2>자주 묻는 질문 (FAQ)</h2>
+  
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>🛍 상품 문의는 어떻게 하나요?</span>
+      <span class="faq-toggle">+</span>
+    </div>
+    <div class="faq-answer">
+      <p>IAN SHOP에서는 데일리 후드티, 베이직 맨투맨, 오프화이트 셔츠, 블랙 슬랙스 등을 판매하고 있습니다. 상품의 사이즈, 색상, 소재에 대한 문의는 아래 채팅 버튼을 통해 문의해주세요.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>📦 배송은 얼마나 걸리나요?</span>
+      <span class="faq-toggle">+</span>
+    </div>
+    <div class="faq-answer">
+      <p>결제 완료 기준 평균 2~3영업일 내 배송됩니다. 주말 및 공휴일은 제외되며, 지역 및 택배사 사정에 따라 지연될 수 있습니다.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>🔄 교환/반품은 어떻게 하나요?</span>
+      <span class="faq-toggle">+</span>
+    </div>
+    <div class="faq-answer">
+      <p>상품 수령 후 7일 이내에 교환/반품 신청이 가능합니다. 상품의 하자나 오배송의 경우 배송비는 무료이며, 단순 변심의 경우 배송비는 고객 부담입니다.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>💳 결제 방법은 무엇이 있나요?</span>
+      <span class="faq-toggle">+</span>
+    </div>
+    <div class="faq-answer">
+      <p>카카오페이, 카드결제, 비트코인 등 다양한 결제 방법을 지원합니다. 주문서 작성 페이지에서 원하시는 결제 방법을 선택하실 수 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- 문의 유형 선택 -->
+<div class="inquiry-section">
+  <h2>문의 유형 선택</h2>
+  <div class="inquiry-buttons">
+    <button class="inquiry-btn" onclick="openChat('product')">
+      <span class="inquiry-icon">🛍</span>
+      <span class="inquiry-text">상품 문의</span>
+    </button>
+    <button class="inquiry-btn" onclick="openChat('delivery')">
+      <span class="inquiry-icon">📦</span>
+      <span class="inquiry-text">배송 문의</span>
+    </button>
+    <button class="inquiry-btn" onclick="openChat('consultant')">
+      <span class="inquiry-icon">👤</span>
+      <span class="inquiry-text">상담원 연결</span>
+    </button>
+  </div>
+</div>
+
+<!-- 채팅 모달 -->
+<div id="chatModal" class="chat-modal">
+  <div class="chat-modal-content">
+    <div class="chat-header">
+      <h3 id="chatTitle">고객 상담</h3>
+      <span class="chat-close" onclick="closeChat()">&times;</span>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-message bot-message">
+        <div class="message-content">
+          <p>안녕하세요! IAN SHOP 고객 상담입니다. 무엇을 도와드릴까요? 😊</p>
+        </div>
+        <div class="message-time"></div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <div class="quick-buttons" id="quickButtons">
+        <button class="quick-btn" onclick="sendQuickMessage('상품 사이즈 문의')">사이즈 문의</button>
+        <button class="quick-btn" onclick="sendQuickMessage('배송 일정 문의')">배송 일정</button>
+        <button class="quick-btn" onclick="sendQuickMessage('교환/반품 문의')">교환/반품</button>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="chatInput" placeholder="메시지를 입력하세요..." onkeypress="handleChatKeyPress(event)">
+        <button onclick="sendMessage()" class="send-btn">전송</button>
+      </div>
+      <div class="chat-info">
+        <p>💡 텔레그램 봇(@ianshopbot)으로도 문의하실 수 있습니다.</p>
+        <a href="https://t.me/ianshopbot" target="_blank" class="telegram-link">텔레그램 봇 열기</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 텔레그램 WebApp 초기화
+if (window.Telegram && window.Telegram.WebApp) {
+  window.Telegram.WebApp.ready();
+  window.Telegram.WebApp.expand();
+}
+
+// FAQ 토글
+function toggleFaq(element) {
+  const faqItem = element.parentElement;
+  const answer = faqItem.querySelector('.faq-answer');
+  const toggle = element.querySelector('.faq-toggle');
+  
+  const isOpen = answer.style.display === 'block';
+  
+  // 모든 FAQ 닫기
+  document.querySelectorAll('.faq-answer').forEach(item => {
+    item.style.display = 'none';
+  });
+  document.querySelectorAll('.faq-toggle').forEach(item => {
+    item.textContent = '+';
+  });
+  
+  // 클릭한 FAQ 토글
+  if (!isOpen) {
+    answer.style.display = 'block';
+    toggle.textContent = '−';
+    faqItem.classList.add('active');
+  } else {
+    faqItem.classList.remove('active');
+  }
+}
+
+// 채팅 열기
+function openChat(type) {
+  const modal = document.getElementById('chatModal');
+  const chatTitle = document.getElementById('chatTitle');
+  const chatBody = document.getElementById('chatBody');
+  
+  // 문의 유형에 따른 제목 설정
+  const titles = {
+    'product': '🛍 상품 문의',
+    'delivery': '📦 배송 문의',
+    'consultant': '👤 상담원 연결'
+  };
+  
+  chatTitle.textContent = titles[type] || '고객 상담';
+  
+  // 초기 메시지 설정
+  const initialMessages = {
+    'product': '상품 문의를 도와드리겠습니다. 어떤 상품에 대해 궁금하신가요?',
+    'delivery': '배송 문의를 도와드리겠습니다. 배송 일정이나 배송비에 대해 문의해주세요.',
+    'consultant': '상담원 연결을 도와드리겠습니다. 상담원: @ianparka (상담 시간: 오전 9시 ~ 오후 6시)'
+  };
+  
+  chatBody.innerHTML = `
+    <div class="chat-message bot-message">
+      <div class="message-content">
+        <p>${initialMessages[type] || '안녕하세요! 무엇을 도와드릴까요?'}</p>
+      </div>
+      <div class="message-time">${getCurrentTime()}</div>
+    </div>
+  `;
+  
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  
+  // 입력 필드 포커스
+  setTimeout(() => {
+    document.getElementById('chatInput').focus();
+  }, 100);
+}
+
+// 채팅 닫기
+function closeChat() {
+  const modal = document.getElementById('chatModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// 메시지 전송
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  
+  if (!message) return;
+  
+  const chatBody = document.getElementById('chatBody');
+  
+  // 사용자 메시지 추가
+  const userMessage = document.createElement('div');
+  userMessage.className = 'chat-message user-message';
+  userMessage.innerHTML = `
+    <div class="message-content">
+      <p>${message}</p>
+    </div>
+    <div class="message-time">${getCurrentTime()}</div>
+  `;
+  chatBody.appendChild(userMessage);
+  
+  // 입력 필드 초기화
+  input.value = '';
+  
+  // 스크롤 하단으로
+  chatBody.scrollTop = chatBody.scrollHeight;
+  
+  // 봇 응답 시뮬레이션 (실제로는 텔레그램 봇 API와 연동)
+  setTimeout(() => {
+    const botResponse = getBotResponse(message);
+    const botMessage = document.createElement('div');
+    botMessage.className = 'chat-message bot-message';
+    botMessage.innerHTML = `
+      <div class="message-content">
+        <p>${botResponse}</p>
+      </div>
+      <div class="message-time">${getCurrentTime()}</div>
+    `;
+    chatBody.appendChild(botMessage);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }, 1000);
+}
+
+// 빠른 메시지 전송
+function sendQuickMessage(message) {
+  document.getElementById('chatInput').value = message;
+  sendMessage();
+}
+
+// 엔터 키 처리
+function handleChatKeyPress(event) {
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+}
+
+// 봇 응답 생성 (실제로는 텔레그램 봇 API와 연동)
+function getBotResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  // 키워드 기반 응답
+  if (lowerMessage.includes('사이즈') || lowerMessage.includes('크기')) {
+    return '사이즈는 S, M, L, XL이 있습니다. 각 상품 상세 페이지에서 사이즈 가이드를 확인하실 수 있습니다.';
+  } else if (lowerMessage.includes('배송') || lowerMessage.includes('언제')) {
+    return '결제 완료 후 평균 2~3영업일 내 배송됩니다. 주말 및 공휴일은 제외됩니다.';
+  } else if (lowerMessage.includes('교환') || lowerMessage.includes('반품')) {
+    return '상품 수령 후 7일 이내에 교환/반품 신청이 가능합니다. 자세한 내용은 상담원에게 문의해주세요.';
+  } else if (lowerMessage.includes('가격') || lowerMessage.includes('비용')) {
+    return '각 상품의 가격은 상품 페이지에서 확인하실 수 있습니다. 추가 할인이나 쿠폰은 장바구니에서 적용 가능합니다.';
+  } else if (lowerMessage.includes('상담원') || lowerMessage.includes('직원')) {
+    return '상담원: @ianparka\n상담 시간: 오전 9시 ~ 오후 6시\n상담 시간 외에는 답변이 지연될 수 있습니다.';
+  } else {
+    return '문의 감사합니다. 더 자세한 내용은 상담원(@ianparka)에게 직접 문의하시거나, 텔레그램 봇(@ianshopbot)을 이용해주세요.';
+  }
+}
+
+// 현재 시간 포맷
+function getCurrentTime() {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+// 모달 외부 클릭 시 닫기
+document.addEventListener('click', function(event) {
+  const chatModal = document.getElementById('chatModal');
+  if (event.target === chatModal) {
+    closeChat();
+  }
+});
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeChat();
+  }
+});
+</script>
+
+</body>
+</html>

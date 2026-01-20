@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>IAN SHOP | 온라인 쇼핑몰</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    // 텔레그램 WebApp 강제 확장 (모바일 최적화)
+    (function() {
+      function forceExpand() {
+        if (window.Telegram && window.Telegram.WebApp) {
+          try {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            // 추가 확장 강제
+            if (window.Telegram.WebApp.viewportHeight) {
+              window.Telegram.WebApp.expand();
+            }
+          } catch (e) {
+            console.error('텔레그램 WebApp 확장 오류:', e);
+          }
+        }
+      }
+      
+      // 즉시 실행
+      forceExpand();
+      
+      // DOM 로드 후 재실행
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', forceExpand);
+      }
+      
+      // 추가 보장 (약간의 지연 후 재실행)
+      setTimeout(forceExpand, 100);
+      setTimeout(forceExpand, 500);
+      
+      // 페이지 로드 완료 후 재실행
+      window.addEventListener('load', forceExpand);
+    })();
+  </script>
+</head>
+<body>
+
+<!-- 헤더 -->
+<header class="shop-header">
+  <div class="header-container">
+    <div class="header-left">
+      <h1 class="shop-logo">IAN SHOP</h1>
+    </div>
+    <div class="header-center">
+      <input type="text" id="searchInput" placeholder="상품명을 입력하세요..." class="search-input">
+      <button id="searchBtn" class="search-btn">🔍</button>
+    </div>
+    <div class="header-right">
+      <a href="cart.html" class="cart-icon-link">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+  </div>
+  
+  <!-- 네비게이션 메뉴 -->
+  <nav class="nav-menu">
+    <button class="nav-tab active" data-category="all">전체</button>
+    <button class="nav-tab" data-category="clothing">의류</button>
+    <button class="nav-tab" data-category="accessories">악세서리</button>
+    <button class="nav-tab" data-category="sale">할인</button>
+    <button class="nav-tab" data-category="new">신상품</button>
+  </nav>
+</header>
+
+<!-- 카테고리 드롭다운 메뉴 -->
+<div id="categoryMenu" class="category-menu" style="display: none;">
+  <div class="category-menu-content">
+    <div class="category-menu-header">
+      <h3>카테고리</h3>
+      <button class="category-menu-close" id="closeCategoryMenu">&times;</button>
+    </div>
+    <div class="category-menu-items">
+      <button class="category-menu-item active" data-category="all">📦 전체</button>
+      <button class="category-menu-item" data-category="clothing">👕 의류</button>
+      <button class="category-menu-item" data-category="top">🧥 상의</button>
+      <button class="category-menu-item" data-category="bottom">👖 하의</button>
+      <button class="category-menu-item" data-category="shoes">👟 신발</button>
+      <button class="category-menu-item" data-category="accessories">👜 악세서리</button>
+      <button class="category-menu-item" data-category="sale">🏷️ 할인 상품</button>
+      <button class="category-menu-item" data-category="new">✨ 신상품</button>
+    </div>
+  </div>
+</div>
+
+<!-- 배너 섹션 -->
+<div class="banner-section">
+  <div class="banner-slider" id="bannerSlider">
+    <div class="banner-item active">
+      <div class="banner-content">
+        <h2>신규 고객 10% 할인</h2>
+        <p>첫 구매 시 WELCOME10 쿠폰 사용</p>
+      </div>
+    </div>
+    <div class="banner-item">
+      <div class="banner-content">
+        <h2>무료배송 이벤트</h2>
+        <p>50,000원 이상 구매 시 무료배송</p>
+      </div>
+    </div>
+    <div class="banner-item">
+      <div class="banner-content">
+        <h2>여름 시즌 특가</h2>
+        <p>선택 상품 최대 30% 할인</p>
+      </div>
+    </div>
+  </div>
+  <div class="banner-dots">
+    <span class="dot active" data-slide="0"></span>
+    <span class="dot" data-slide="1"></span>
+    <span class="dot" data-slide="2"></span>
+  </div>
+</div>
+
+<!-- 필터 섹션 -->
+<div class="filter-section">
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-sort="popular">인기순</button>
+    <button class="filter-btn" data-sort="price-low">낮은 가격순</button>
+    <button class="filter-btn" data-sort="price-high">높은 가격순</button>
+    <button class="filter-btn" data-sort="newest">최신순</button>
+  </div>
+</div>
+
+<!-- 메인 콘텐츠 -->
+<main class="main-content">
+  <div class="product-container" id="productContainer"></div>
+  
+  <!-- 검색 결과 없음 -->
+  <div id="noResults" class="no-results" style="display: none;">
+    <p>검색 결과가 없습니다.</p>
+  </div>
+</main>
+
+<!-- 푸터 -->
+<footer class="shop-footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>고객센터</h3>
+      <p>평일 09:00 - 18:00</p>
+      <p>주말 및 공휴일 휴무</p>
+      <a href="support.html" class="footer-link">💬 고객 상담</a>
+    </div>
+    <div class="footer-section">
+      <h3>배송 정보</h3>
+      <p>무료배송: 50,000원 이상</p>
+      <p>당일발송: 오전 주문 시</p>
+      <p>배송비: 3,000원</p>
+    </div>
+    <div class="footer-section">
+      <h3>회사 정보</h3>
+      <p>IAN SHOP</p>
+      <p>사업자등록번호: 123-45-67890</p>
+      <p>대표: IAN</p>
+    </div>
+    <div class="footer-section">
+      <h3>정책</h3>
+      <a href="#" class="footer-link" id="termsLink">이용약관</a>
+      <a href="#" class="footer-link" id="privacyLink">개인정보처리방침</a>
+      <a href="#" class="footer-link" id="refundLink">교환/환불 정책</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 IAN SHOP. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- 상품 상세보기 모달 -->
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- 정책 모달 -->
+<div id="policyModal" class="modal" style="display: none;">
+  <div class="modal-content policy-modal-content">
+    <span class="close" id="closePolicyModal">&times;</span>
+    <div id="policyModalBody"></div>
+  </div>
+</div>
+
+<script src="cart.js"></script>
+<script>
+// 텔레그램 WebApp 초기화 (이미 위에서 처리됨)
+
+// 상품 데이터 확장 (할인가, 리뷰, 평점, 배송 정보 포함)
+const products = [
+  {
+    id: 1,
+    name: '데일리 후드티',
+    price: 39000,
+    originalPrice: 49000,
+    discount: 20,
+    image: 'https://wonhyuka3642-lab.github.io/ian/images/bazzi.png',
+    description: '편안한 착용감의 일상용 후드티입니다. 부드러운 소재로 제작되어 오래 입어도 변형이 적습니다.',
+    material: '면 80%, 폴리에스터 20%',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['블랙', '화이트', '그레이', '네이비'],
+    care: '세탁기 세탁 가능 (30도 이하), 드라이클리닝 가능',
+    category: 'clothing',
+    rating: 4.5,
+    reviews: 123,
+    shipping: '무료배송',
+    badge: 'HOT',
+    isNew: false
+  },
+  {
+    id: 2,
+    name: '베이직 맨투맨',
+    price: 29000,
+    originalPrice: 35000,
+    discount: 17,
+    image: 'https://wonhyuka3642-lab.github.io/ian/images/bazzi.png',
+    description: '심플하고 깔끔한 디자인의 베이직 맨투맨입니다. 다양한 스타일에 매치하기 좋습니다.',
+    material: '면 100%',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['화이트', '블랙', '베이지', '카키'],
+    care: '세탁기 세탁 가능 (30도 이하), 건조기 사용 가능',
+    category: 'clothing',
+    rating: 4.3,
+    reviews: 89,
+    shipping: '무료배송',
+    badge: 'NEW',
+    isNew: true
+  },
+  {
+    id: 3,
+    name: '오프화이트 셔츠',
+    price: 35000,
+    originalPrice: 35000,
+    discount: 0,
+    image: 'https://wonhyuka3642-lab.github.io/ian/images/bazzi.png',
+    description: '트렌디한 오프화이트 컬러의 캐주얼 셔츠입니다. 비즈니스 캐주얼부터 데일리까지 활용 가능합니다.',
+    material: '면 70%, 폴리에스터 30%',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['오프화이트', '아이보리', '크림'],
+    care: '세탁기 세탁 가능, 드라이클리닝 권장',
+    category: 'clothing',
+    rating: 4.7,
+    reviews: 156,
+    shipping: '무료배송',
+    badge: null,
+    isNew: false
+  },
+  {
+    id: 4,
+    name: '블랙 슬랙스',
+    price: 45000,
+    originalPrice: 60000,
+    discount: 25,
+    image: 'https://wonhyuka3642-lab.github.io/ian/images/bazzi.png',
+    description: '정장부터 캐주얼까지 다양한 스타일에 매치되는 블랙 슬랙스입니다. 슬림핏으로 깔끔한 실루엣을 연출합니다.',
+    material: '폴리에스터 95%, 스판덱스 5%',
+    sizes: ['28', '30', '32', '34', '36'],
+    colors: ['블랙', '차콜', '네이비'],
+    care: '세탁기 세탁 가능, 드라이클리닝 권장, 다림질 시 저온 사용',
+    category: 'clothing',
+    rating: 4.8,
+    reviews: 234,
+    shipping: '무료배송',
+    badge: 'SALE',
+    isNew: false
+  },
+  {
+    id: 5,
+    name: '레더 벨트',
+    price: 25000,
+    originalPrice: 35000,
+    discount: 29,
+    image: 'https://wonhyuka3642-lab.github.io/ian/images/bazzi.png',
+    description: '고급 가죽으로 제작된 클래식한 디자인의 벨트입니다. 다양한 사이즈로 제공됩니다.',
+    material: '천연가죽 100%',
+    sizes: ['90', '95', '100', '105', '110'],
+    colors: ['브라운', '블랙'],
+    care: '물세탁 불가, 가죽 전용 세정제 사용',
+    category: 'accessories',
+    rating: 4.6,
+    reviews: 67,
+    shipping: '무료배송',
+    badge: 'SALE',
+    isNew: false
+  },
+  {
+    id: 6,
+    name: '스니커즈',
+    price: 89000,
+    originalPrice: 120000,
+    discount: 26,
+    image: 'https://wonhyuka3642-lab.github.io/ian/images/bazzi.png',
+    description: '편안한 착용감의 캐주얼 스니커즈입니다. 일상부터 운동까지 다양하게 활용 가능합니다.',
+    material: '합성섬유, 고무',
+    sizes: ['240', '250', '260', '270', '280'],
+    colors: ['화이트', '블랙', '네이비'],
+    care: '물세탁 가능 (손세탁 권장)',
+    category: 'accessories',
+    rating: 4.9,
+    reviews: 312,
+    shipping: '무료배송',
+    badge: 'HOT',
+    isNew: false
+  }
+];
+
+// 필터링 및 정렬 상태
+let currentCategory = 'all';
+let currentSort = 'popular';
+let searchQuery = '';
+
+// 장바구니 개수 업데이트
+function updateCartBadge() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  if (badge) {
+    badge.textContent = totalQty;
+    badge.style.display = totalQty > 0 ? 'block' : 'none';
+  }
+}
+
+// 상품 목록 렌더링
+function renderProducts() {
+  const container = document.getElementById('productContainer');
+  const noResults = document.getElementById('noResults');
+  
+  // 필터링
+  let filteredProducts = [...products];
+  
+  // 카테고리 필터
+  if (currentCategory !== 'all') {
+    if (currentCategory === 'sale') {
+      filteredProducts = filteredProducts.filter(p => p.discount > 0);
+    } else if (currentCategory === 'new') {
+      filteredProducts = filteredProducts.filter(p => p.isNew);
+    } else if (currentCategory === 'top') {
+      // 상의 카테고리 (후드티, 맨투맨, 셔츠)
+      filteredProducts = filteredProducts.filter(p => 
+        p.category === 'clothing' && (p.name.includes('후드티') || p.name.includes('맨투맨') || p.name.includes('셔츠'))
+      );
+    } else if (currentCategory === 'bottom') {
+      // 하의 카테고리 (슬랙스, 바지)
+      filteredProducts = filteredProducts.filter(p => 
+        p.category === 'clothing' && (p.name.includes('슬랙스') || p.name.includes('바지') || p.name.includes('팬츠'))
+      );
+    } else if (currentCategory === 'shoes') {
+      // 신발 카테고리
+      filteredProducts = filteredProducts.filter(p => 
+        p.name.includes('신발') || p.name.includes('스니커즈') || p.name.includes('슈즈')
+      );
+    } else {
+      filteredProducts = filteredProducts.filter(p => p.category === currentCategory);
+    }
+  }
+  
+  // 검색 필터
+  if (searchQuery) {
+    filteredProducts = filteredProducts.filter(p => 
+      p.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+  
+  // 정렬
+  filteredProducts.sort((a, b) => {
+    switch (currentSort) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'newest':
+        return b.id - a.id;
+      case 'popular':
+      default:
+        return b.rating - a.rating;
+    }
+  });
+  
+  // 결과 없음 처리
+  if (filteredProducts.length === 0) {
+    container.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  
+  noResults.style.display = 'none';
+  container.innerHTML = '';
+  
+  filteredProducts.forEach(product => {
+    const productDiv = document.createElement('div');
+    productDiv.className = 'product';
+    
+    // 배지 HTML
+    const badgeHtml = product.badge ? `<span class="product-badge ${product.badge.toLowerCase()}">${product.badge}</span>` : '';
+    
+    // 할인가 표시
+    const priceHtml = product.discount > 0 
+      ? `<div class="product-price-wrapper">
+           <span class="product-original-price">₩${product.originalPrice.toLocaleString()}</span>
+           <span class="product-price">₩${product.price.toLocaleString()}</span>
+           <span class="product-discount">${product.discount}% OFF</span>
+         </div>`
+      : `<div class="product-price-wrapper">
+           <span class="product-price">₩${product.price.toLocaleString()}</span>
+         </div>`;
+    
+    // 평점 HTML
+    const ratingHtml = `
+      <div class="product-rating">
+        <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</span>
+        <span class="rating-score">${product.rating}</span>
+        <span class="rating-reviews">(${product.reviews})</span>
+      </div>
+    `;
+    
+    productDiv.innerHTML = `
+      <div class="product-image-wrapper">
+        ${badgeHtml}
+        <img src="${product.image}" alt="${product.name}" class="product-image" data-product-id="${product.id}">
+      </div>
+      <div class="product-info">
+        <h3 class="product-name" data-product-id="${product.id}">${product.name}</h3>
+        ${ratingHtml}
+        ${priceHtml}
+        <div class="product-shipping">🚚 ${product.shipping}</div>
+        <div class="product-actions">
+          <button class="btn-buy-now" data-product-name="${product.name}" data-product-price="${product.price}">바로 구매</button>
+          <button class="btn-add-cart" data-product-name="${product.name}" data-product-price="${product.price}">장바구니</button>
+        </div>
+      </div>
+    `;
+    
+    container.appendChild(productDiv);
+  });
+  
+  // 이벤트 리스너 추가
+  attachProductEventListeners();
+}
+
+// 상품 이벤트 리스너 연결
+function attachProductEventListeners() {
+  // 상품 이미지/이름 클릭 -> 상세보기
+  document.querySelectorAll('.product-image, .product-name').forEach(element => {
+    element.addEventListener('click', function() {
+      const productId = parseInt(this.dataset.productId);
+      showProductDetail(productId);
+    });
+  });
+  
+  // 바로 구매 버튼
+  document.querySelectorAll('.btn-buy-now').forEach(btn => {
+    btn.addEventListener('click', function() {
+      buyNow(this.dataset.productName, parseInt(this.dataset.productPrice));
+    });
+  });
+  
+  // 장바구니 담기 버튼
+  document.querySelectorAll('.btn-add-cart').forEach(btn => {
+    btn.addEventListener('click', function() {
+      addToCart(this.dataset.productName, parseInt(this.dataset.productPrice));
+    });
+  });
+}
+
+// 상품 상세보기 모달
+function showProductDetail(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  const modal = document.getElementById('productModal');
+  const modalBody = document.getElementById('modalBody');
+  
+  const badgeHtml = product.badge ? `<span class="product-badge ${product.badge.toLowerCase()}">${product.badge}</span>` : '';
+  
+  const priceHtml = product.discount > 0 
+    ? `<div class="product-price-wrapper">
+         <span class="product-original-price">₩${product.originalPrice.toLocaleString()}</span>
+         <span class="product-price">₩${product.price.toLocaleString()}</span>
+         <span class="product-discount">${product.discount}% OFF</span>
+       </div>`
+    : `<div class="product-price-wrapper">
+         <span class="product-price">₩${product.price.toLocaleString()}</span>
+       </div>`;
+  
+  modalBody.innerHTML = `
+    <div class="product-detail">
+      <div class="product-detail-image">
+        ${badgeHtml}
+        <img src="${product.image}" alt="${product.name}" id="productDetailImage">
+      </div>
+      <div class="product-detail-info">
+        <h2>${product.name}</h2>
+        ${priceHtml}
+        <div class="product-rating">
+          <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</span>
+          <span class="rating-score">${product.rating}</span>
+          <span class="rating-reviews">(${product.reviews}개 리뷰)</span>
+        </div>
+        <div class="product-shipping-detail">🚚 ${product.shipping} | 당일발송</div>
+        
+        <div class="detail-section">
+          <h3>상품 설명</h3>
+          <p>${product.description}</p>
+        </div>
+        
+        <div class="detail-section">
+          <h3>소재</h3>
+          <p>${product.material}</p>
+        </div>
+        
+        <div class="detail-section">
+          <h3>사이즈</h3>
+          <div class="size-options">
+            ${product.sizes.map(size => `<span class="size-option">${size}</span>`).join('')}
+          </div>
+        </div>
+        
+        <div class="detail-section">
+          <h3>색상</h3>
+          <div class="color-options">
+            ${product.colors.map(color => `<span class="color-option">${color}</span>`).join('')}
+          </div>
+        </div>
+        
+        <div class="detail-section">
+          <h3>세탁 방법</h3>
+          <p style="font-size: 0.9em; color: #666;">${product.care}</p>
+        </div>
+        
+        <div class="product-detail-actions">
+          <button class="btn-buy" onclick="buyNow('${product.name}', ${product.price}); closeModal();">바로 구매하기</button>
+          <button class="btn-cart" onclick="addToCart('${product.name}', ${product.price}); closeModal();">장바구니 담기</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  
+  // 이미지 클릭 시 확대
+  const detailImage = document.getElementById('productDetailImage');
+  if (detailImage) {
+    detailImage.style.cursor = 'zoom-in';
+    detailImage.addEventListener('click', function() {
+      if (this.style.transform === 'scale(2)') {
+        this.style.transform = 'scale(1)';
+        this.style.cursor = 'zoom-in';
+      } else {
+        this.style.transform = 'scale(2)';
+        this.style.cursor = 'zoom-out';
+      }
+    });
+  }
+}
+
+// 모달 닫기
+function closeModal() {
+  const modal = document.getElementById('productModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// 모달 닫기 버튼
+document.getElementById('closeModal').addEventListener('click', closeModal);
+
+// 모달 외부 클릭 시 닫기
+document.addEventListener('click', function(event) {
+  const modal = document.getElementById('productModal');
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeModal();
+  }
+});
+
+// 바로 구매
+function buyNow(name, price) {
+  const cart = [{ name, price, qty: 1 }];
+  localStorage.setItem("cart", JSON.stringify(cart));
+  window.location.href = "order.html";
+}
+
+// 장바구니 담기
+function addToCart(name, price) {
+  addCart(name, price);
+  updateCartBadge();
+  
+  // 텔레그램 햅틱 피드백
+  if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+    window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+  }
+  
+  // 알림 표시
+  const notification = document.createElement('div');
+  notification.className = 'cart-notification';
+  notification.textContent = '장바구니에 추가되었습니다!';
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => notification.remove(), 300);
+  }, 2000);
+}
+
+// 검색 기능
+document.getElementById('searchBtn').addEventListener('click', function() {
+  searchQuery = document.getElementById('searchInput').value.trim();
+  renderProducts();
+});
+
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    searchQuery = this.value.trim();
+    renderProducts();
+  }
+});
+
+// 카테고리 탭 클릭
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    currentCategory = this.dataset.category;
+    renderProducts();
+  });
+});
+
+// 메뉴 버튼 클릭 - 카테고리 메뉴 열기/닫기
+const menuBtn = document.getElementById('menuBtn');
+const categoryMenu = document.getElementById('categoryMenu');
+const closeCategoryMenu = document.getElementById('closeCategoryMenu');
+
+if (menuBtn && categoryMenu) {
+  menuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    categoryMenu.style.display = categoryMenu.style.display === 'none' ? 'flex' : 'none';
+  });
+}
+
+if (closeCategoryMenu) {
+  closeCategoryMenu.addEventListener('click', function() {
+    categoryMenu.style.display = 'none';
+  });
+}
+
+// 카테고리 메뉴 외부 클릭 시 닫기
+document.addEventListener('click', function(e) {
+  if (categoryMenu && !categoryMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+    categoryMenu.style.display = 'none';
+  }
+});
+
+// 카테고리 메뉴 아이템 클릭
+document.querySelectorAll('.category-menu-item').forEach(item => {
+  item.addEventListener('click', function() {
+    // 활성 상태 변경
+    document.querySelectorAll('.category-menu-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+    
+    // 네비게이션 탭도 업데이트
+    const category = this.dataset.category;
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      if (tab.dataset.category === category) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+    
+    // 카테고리 변경 및 상품 렌더링
+    currentCategory = category;
+    renderProducts();
+    
+    // 메뉴 닫기
+    categoryMenu.style.display = 'none';
+  });
+});
+
+// 필터 버튼 클릭
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentSort = this.dataset.sort;
+    renderProducts();
+  });
+});
+
+// 배너 슬라이더
+let currentSlide = 0;
+const slides = document.querySelectorAll('.banner-item');
+const dots = document.querySelectorAll('.dot');
+
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === index);
+  });
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+}
+
+dots.forEach((dot, index) => {
+  dot.addEventListener('click', function() {
+    currentSlide = index;
+    showSlide(currentSlide);
+  });
+});
+
+// 배너 자동 슬라이드
+setInterval(() => {
+  currentSlide = (currentSlide + 1) % slides.length;
+  showSlide(currentSlide);
+}, 4000);
+
+// 정책 모달 열기 함수
+function openPolicyModal(type) {
+  const modal = document.getElementById('policyModal');
+  const modalBody = document.getElementById('policyModalBody');
+  
+  if (!modal || !modalBody) return;
+  
+  let title = '';
+  let content = '';
+  
+  if (type === 'terms') {
+    title = '이용약관';
+    content = `
+      <h2>${title}</h2>
+      <div class="policy-content">
+        <p><strong>제1조 (목적)</strong></p>
+        <p>이 약관은 IAN SHOP(이하 "회사")이 운영하는 온라인 쇼핑몰에서 제공하는 서비스의 이용과 관련하여 회사와 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+        
+        <p><strong>제2조 (정의)</strong></p>
+        <ul>
+          <li>"몰"이란 회사가 재화 또는 용역을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 또는 용역을 거래할 수 있도록 설정한 가상의 영업장을 의미합니다.</li>
+          <li>"이용자"란 몰에 접속하여 이 약관에 따라 몰이 제공하는 서비스를 받는 회원 및 비회원을 의미합니다.</li>
+          <li>"회원"이란 몰에 회원등록을 하고 몰을 이용하는 자를 의미합니다.</li>
+        </ul>
+        
+        <p><strong>제3조 (약관의 명시와 설명 및 개정)</strong></p>
+        <p>1. 회사는 이 약관의 내용과 상호, 영업소 소재지 등을 이용자가 쉽게 알 수 있도록 몰의 초기 서비스화면에 게시합니다.</p>
+        <p>2. 회사는 전자상거래 등에서의 소비자보호에 관한 법률, 약관의 규제에 관한 법률 등 관련법을 위배하지 않는 범위에서 이 약관을 개정할 수 있습니다.</p>
+        
+        <p><strong>제4조 (서비스의 제공)</strong></p>
+        <p>1. 회사는 다음과 같은 서비스를 제공합니다:</p>
+        <ul>
+          <li>재화 또는 용역에 대한 정보 제공 및 구매 계약의 체결</li>
+          <li>구매 계약이 체결된 재화 또는 용역의 배송</li>
+          <li>기타 회사가 정하는 업무</li>
+        </ul>
+        
+        <p><strong>제5조 (회원가입)</strong></p>
+        <p>1. 이용자는 회사가 정한 가입 양식에 따라 회원정보를 기입한 후 이 약관에 동의한다는 의사표시를 함으로서 회원가입을 신청합니다.</p>
+        <p>2. 회사는 회원가입을 신청한 이용자 중 다음 각 호에 해당하지 않는 한 회원으로 등록합니다:</p>
+        <ul>
+          <li>가입신청자가 이 약관에 의하여 이전에 회원자격을 상실한 적이 있는 경우</li>
+          <li>등록 내용에 허위, 기재누락, 오기가 있는 경우</li>
+        </ul>
+        
+        <p><strong>제6조 (구매신청)</strong></p>
+        <p>몰 이용자는 몰 상에서 재화 등의 검색 및 선택, 받는 사람의 성명, 주소, 전화번호 등의 입력을 통하여 구매를 신청합니다.</p>
+        
+        <p><strong>제7조 (지급방법)</strong></p>
+        <p>몰에서 구매한 재화 또는 용역에 대한 대금지급방법은 다음 각 호의 방법 중 가용한 방법으로 할 수 있습니다:</p>
+        <ul>
+          <li>카카오페이, 신용카드결제, 비트코인 등 다양한 전자지급수단</li>
+          <li>실시간 계좌이체</li>
+        </ul>
+        
+        <p><strong>시행일자</strong></p>
+        <p>이 약관은 2024년 1월 1일부터 시행됩니다.</p>
+      </div>
+    `;
+  } else if (type === 'privacy') {
+    title = '개인정보처리방침';
+    content = `
+      <h2>${title}</h2>
+      <div class="policy-content">
+        <p><strong>제1조 (개인정보의 처리목적)</strong></p>
+        <p>IAN SHOP(이하 "회사")은 다음의 목적을 위하여 개인정보를 처리합니다.</p>
+        
+        <p><strong>1. 홈페이지 회원 가입 및 관리</strong></p>
+        <ul>
+          <li>회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리</li>
+        </ul>
+        
+        <p><strong>2. 재화 또는 서비스 제공</strong></p>
+        <ul>
+          <li>물품배송, 서비스 제공, 계약서·청구서 발송, 요금결제·정산</li>
+        </ul>
+        
+        <p><strong>3. 마케팅 및 광고에의 활용</strong></p>
+        <ul>
+          <li>신규 서비스 개발 및 맞춤 서비스 제공, 이벤트 및 광고성 정보 제공</li>
+        </ul>
+        
+        <p><strong>제2조 (개인정보의 처리 및 보유기간)</strong></p>
+        <p>1. 회사는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다.</p>
+        <p>2. 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다:</p>
+        <ul>
+          <li><strong>홈페이지 회원 가입 및 관리:</strong> 회원 탈퇴 시까지</li>
+          <li><strong>재화 또는 서비스 제공:</strong> 재화·서비스 공급완료 및 요금결제·정산 완료 시까지</li>
+          <li><strong>전자상거래에서의 계약·청약철회 등에 관한 기록:</strong> 5년</li>
+          <li><strong>대금결제 및 재화 등의 공급에 관한 기록:</strong> 5년</li>
+        </ul>
+        
+        <p><strong>제3조 (처리하는 개인정보의 항목)</strong></p>
+        <p>회사는 다음의 개인정보 항목을 처리하고 있습니다:</p>
+        <ul>
+          <li><strong>필수항목:</strong> 이름, 전화번호, 배송 주소</li>
+          <li><strong>선택항목:</strong> 이메일 주소</li>
+          <li><strong>자동 수집 항목:</strong> IP주소, 쿠키, 서비스 이용 기록, 방문 기록 등</li>
+        </ul>
+        
+        <p><strong>제4조 (개인정보 보호책임자)</strong></p>
+        <p>회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
+        <ul>
+          <li><strong>개인정보 보호책임자:</strong> IAN</li>
+          <li><strong>연락처:</strong> support@ianshop.com</li>
+        </ul>
+        
+        <p><strong>시행일자</strong></p>
+        <p>이 개인정보처리방침은 2024년 1월 1일부터 적용됩니다.</p>
+      </div>
+    `;
+  } else if (type === 'refund') {
+    title = '교환/환불 정책';
+    content = `
+      <h2>${title}</h2>
+      <div class="policy-content">
+        <p><strong>제1조 (청약철회)</strong></p>
+        <p>1. 회사와 재화 등의 구매에 관한 계약을 체결한 이용자는 계약내용에 관한 서면을 받은 날부터 7일 이내에는 청약의 철회를 할 수 있습니다.</p>
+        <p>2. 다음 각 호의 어느 하나에 해당하는 경우에는 이용자의 청약철회권이 제한됩니다:</p>
+        <ul>
+          <li>이용자에게 책임 있는 사유로 재화 등이 멸실 또는 훼손된 경우</li>
+          <li>이용자의 사용 또는 일부 소비로 재화 등의 가치가 현저히 감소한 경우</li>
+          <li>시간의 경과에 의하여 재판매가 곤란할 정도로 재화 등의 가치가 현저히 감소한 경우</li>
+        </ul>
+        
+        <p><strong>제2조 (청약철회 등의 효과)</strong></p>
+        <p>1. 회사는 이용자로부터 재화 등을 반환받은 경우 3영업일 이내에 이미 지급받은 재화 등의 대금을 환급합니다.</p>
+        <p>2. 청약철회 등의 경우 공급받은 재화 등의 반환에 필요한 비용은 이용자가 부담합니다.</p>
+        
+        <p><strong>제3조 (교환 및 반품)</strong></p>
+        <p>1. 상품 수령 후 7일 이내 교환/반품 신청이 가능합니다.</p>
+        <p>2. 다음의 경우에는 교환 및 반품이 불가능합니다:</p>
+        <ul>
+          <li>이용자에게 책임 있는 사유로 상품이 멸실 또는 훼손된 경우</li>
+          <li>이용자의 사용 또는 일부 소비로 상품의 가치가 현저히 감소한 경우</li>
+        </ul>
+        <p>3. 교환 및 반품 배송비:</p>
+        <ul>
+          <li>고객님의 단순 변심: 왕복 배송비 고객 부담 (5,000원)</li>
+          <li>상품 불량 및 오배송: 배송비 회사 부담</li>
+        </ul>
+        
+        <p><strong>제4조 (환불 절차)</strong></p>
+        <p>1. 환불 신청은 고객센터를 통해 접수할 수 있습니다.</p>
+        <p>2. 환불 처리 기간:</p>
+        <ul>
+          <li><strong>신용카드:</strong> 환불 접수 완료 후 3~5영업일 내 카드사에 환불 요청 후 5~7영업일 소요</li>
+          <li><strong>계좌이체:</strong> 환불 접수 완료 후 1~2영업일 내 환불 처리</li>
+          <li><strong>가상화폐:</strong> 환불 접수 완료 후 3~5영업일 내 환불 처리</li>
+        </ul>
+        <p>3. 환불 금액은 결제하신 방법과 동일한 방법으로 환불됩니다.</p>
+        
+        <p><strong>제5조 (A/S 정책)</strong></p>
+        <p>1. 제품 하자 및 불량의 경우 구매일로부터 1년 이내 무상 A/S를 제공합니다.</p>
+        <p>2. 제품 하자로 인한 교환의 경우, 배송비는 회사가 부담합니다.</p>
+        
+        <p><strong>문의처</strong></p>
+        <p>고객센터: support@ianshop.com</p>
+        <p>운영시간: 평일 09:00 - 18:00 (주말 및 공휴일 휴무)</p>
+      </div>
+    `;
+  }
+  
+  modalBody.innerHTML = content;
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+// 정책 링크 클릭 이벤트
+document.addEventListener('DOMContentLoaded', function() {
+  const termsLink = document.getElementById('termsLink');
+  const privacyLink = document.getElementById('privacyLink');
+  const refundLink = document.getElementById('refundLink');
+  const closePolicyModal = document.getElementById('closePolicyModal');
+  const policyModal = document.getElementById('policyModal');
+  
+  if (termsLink) {
+    termsLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      openPolicyModal('terms');
+    });
+  }
+  
+  if (privacyLink) {
+    privacyLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      openPolicyModal('privacy');
+    });
+  }
+  
+  if (refundLink) {
+    refundLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      openPolicyModal('refund');
+    });
+  }
+  
+  if (closePolicyModal) {
+    closePolicyModal.addEventListener('click', function() {
+      if (policyModal) {
+        policyModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+  
+  // 정책 모달 외부 클릭 시 닫기
+  if (policyModal) {
+    policyModal.addEventListener('click', function(e) {
+      if (e.target === policyModal) {
+        policyModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+  
+  // ESC 키로 모달 닫기
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && policyModal && policyModal.style.display === 'block') {
+      policyModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+  });
+});
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+  updateCartBadge();
+  renderProducts();
+});
+</script>
+
+</body>
+</html>
