@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>주문 완료 | IAN SHOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    // 텔레그램 WebApp 강제 확장 (모바일 최적화)
+    (function() {
+      function forceExpand() {
+        if (window.Telegram && window.Telegram.WebApp) {
+          try {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            if (window.Telegram.WebApp.viewportHeight) {
+              window.Telegram.WebApp.expand();
+            }
+          } catch (e) {
+            console.error('텔레그램 WebApp 확장 오류:', e);
+          }
+        }
+      }
+      forceExpand();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', forceExpand);
+      }
+      setTimeout(forceExpand, 100);
+      setTimeout(forceExpand, 500);
+      window.addEventListener('load', forceExpand);
+    })();
+  </script>
+</head>
+<body>
+
+<div class="order-complete-container">
+  <div class="complete-icon">✓</div>
+  <h1>주문이 완료되었습니다!</h1>
+  
+  <div class="order-info-card">
+    <h2>주문 정보</h2>
+    <div id="orderCompleteInfo"></div>
+  </div>
+  
+  <div class="order-actions">
+    <a href="index.html"><button class="btn-primary">쇼핑 계속하기</button></a>
+    <button onclick="viewOrderHistory()" class="btn-secondary">주문 내역 보기</button>
+  </div>
+</div>
+
+<script>
+const orderComplete = JSON.parse(localStorage.getItem('orderComplete')) || {};
+
+if (orderComplete.orderNumber) {
+  const infoDiv = document.getElementById('orderCompleteInfo');
+  
+  let html = `
+    <div class="info-item">
+      <span class="info-label">주문 번호</span>
+      <span class="info-value">${orderComplete.orderNumber}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">결제 방법</span>
+      <span class="info-value">${orderComplete.paymentMethod || '미지정'}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">결제 금액</span>
+      <span class="info-value">₩${(orderComplete.total || 0).toLocaleString()}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">주문 일시</span>
+      <span class="info-value">${new Date(orderComplete.orderDate).toLocaleString('ko-KR')}</span>
+    </div>
+  `;
+  
+  if (orderComplete.cart && orderComplete.cart.length > 0) {
+    html += `<div class="order-items">
+      <h3>주문 상품</h3>`;
+    orderComplete.cart.forEach(item => {
+      html += `<div class="order-item">
+        <span>${item.name} × ${item.qty}</span>
+        <span>₩${(item.price * item.qty).toLocaleString()}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  
+  if (orderComplete.name) {
+    html += `
+      <div class="delivery-info">
+        <h3>배송 정보</h3>
+        <p><strong>수령인:</strong> ${orderComplete.name}</p>
+        <p><strong>연락처:</strong> ${orderComplete.phone}</p>
+        <p><strong>배송 주소:</strong> ${orderComplete.address}</p>
+        ${orderComplete.memo ? `<p><strong>요청사항:</strong> ${orderComplete.memo}</p>` : ''}
+      </div>
+    `;
+  }
+  
+  infoDiv.innerHTML = html;
+} else {
+  document.getElementById('orderCompleteInfo').innerHTML = 
+    '<p>주문 정보를 찾을 수 없습니다.</p>';
+}
+
+function viewOrderHistory() {
+  alert('주문 내역 기능은 추후 구현 예정입니다.');
+}
+</script>
+
+</body>
+</html>
