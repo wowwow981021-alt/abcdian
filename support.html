@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>고객 상담 | IAN SHOP</title>
+  <title>고객센터 | 이안티켓</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    // 텔레그램 WebApp 강제 확장 (모바일 최적화)
     (function() {
       function forceExpand() {
         if (window.Telegram && window.Telegram.WebApp) {
@@ -37,77 +36,133 @@
 </head>
 <body>
 
-<h1>💬 고객 상담</h1>
-
-<a href="index.html"><button>🏠 메인 화면으로</button></a>
-
-<hr>
-
-<!-- FAQ 섹션 -->
-<div class="faq-section">
-  <h2>자주 묻는 질문 (FAQ)</h2>
-  
-  <div class="faq-item">
-    <div class="faq-question" onclick="toggleFaq(this)">
-      <span>🛍 상품 문의는 어떻게 하나요?</span>
-      <span class="faq-toggle">+</span>
+<header class="shop-header">
+  <div class="header-container">
+    <div class="header-left">
+      <h1 class="shop-logo">고객센터</h1>
     </div>
-    <div class="faq-answer">
-      <p>IAN SHOP에서는 데일리 후드티, 베이직 맨투맨, 오프화이트 셔츠, 블랙 슬랙스 등을 판매하고 있습니다. 상품의 사이즈, 색상, 소재에 대한 문의는 아래 채팅 버튼을 통해 문의해주세요.</p>
+    <div class="header-right">
+      <a href="index.html" class="cart-icon-link">
+        <span class="cart-icon">🏠</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="main-content" style="padding: 20px;">
+  <h2 style="text-align: center; margin-bottom: 30px;">고객센터</h2>
+
+  <!-- 공지사항 섹션 -->
+  <div class="notice-section">
+    <h3>📢 공지사항</h3>
+    <div class="notice-list">
+      <div class="notice-item">
+        <div class="notice-title">[주의] 사칭 홈페이지 주의!!!</div>
+        <div class="notice-date">4개월 전</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-title">2026년 1월 상품권 매입안내</div>
+        <div class="notice-date">19일 전</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-title">2025년 12월 상품권 매입안내</div>
+        <div class="notice-date">1개월 전</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-title">2025년 11월 상품권 매입안내</div>
+        <div class="notice-date">2개월 전</div>
+      </div>
     </div>
   </div>
 
-  <div class="faq-item">
-    <div class="faq-question" onclick="toggleFaq(this)">
-      <span>📦 배송은 얼마나 걸리나요?</span>
-      <span class="faq-toggle">+</span>
+  <hr style="margin: 30px 0;">
+
+  <!-- FAQ 섹션 -->
+  <div class="faq-section">
+    <h2>자주 묻는 질문 (FAQ)</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>💰 상품권 매입 시세는 어떻게 되나요?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>상품권 종류에 따라 매입 시세가 다릅니다. 컬쳐랜드, 문화상품권, 북앤라이프 등은 90%, 롯데모바일, 신세계모바일상품권은 93%, 스타벅스는 85%입니다. 정확한 시세는 메인 페이지에서 확인하실 수 있습니다.</p>
+      </div>
     </div>
-    <div class="faq-answer">
-      <p>결제 완료 기준 평균 2~3영업일 내 배송됩니다. 주말 및 공휴일은 제외되며, 지역 및 택배사 사정에 따라 지연될 수 있습니다.</p>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>⏰ 입금은 얼마나 걸리나요?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>상품권 검증은 평균 1~2시간 내 완료되며, 검증 완료 후 입금은 1~2일 내 처리됩니다. 영업일 기준으로 처리되며, 주말 및 공휴일은 제외됩니다.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>📋 주문 조회는 어떻게 하나요?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>메인 페이지의 '내 주문조회' 메뉴에서 이름과 휴대폰 번호를 입력하시면 최근 1년 이내 신청하신 주문을 조회하실 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>🔍 상품권 검증이 실패하면 어떻게 되나요?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>상품권 번호가 잘못 입력되었거나 이미 사용된 상품권인 경우 검증이 실패할 수 있습니다. 검증 실패 시 고객센터로 연락주시면 확인 후 안내해드리겠습니다.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>💳 어떤 상품권을 매입하나요?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>컬쳐랜드 상품권, 문화상품권, 북앤라이프, 틴캐시, 롯데모바일 교환권, 구글 교환권, 스타벅스 e카드/기프트카드, 신세계모바일상품권 등을 매입하고 있습니다. 자세한 내용은 메인 페이지에서 확인하실 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>📞 문의는 어떻게 하나요?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>고객센터 채팅을 통해 24시간 문의하실 수 있습니다. 급한 문의는 카카오톡으로 문의주시면 빠르게 처리해드릴게요!</p>
+      </div>
     </div>
   </div>
 
-  <div class="faq-item">
-    <div class="faq-question" onclick="toggleFaq(this)">
-      <span>🔄 교환/반품은 어떻게 하나요?</span>
-      <span class="faq-toggle">+</span>
-    </div>
-    <div class="faq-answer">
-      <p>상품 수령 후 7일 이내에 교환/반품 신청이 가능합니다. 상품의 하자나 오배송의 경우 배송비는 무료이며, 단순 변심의 경우 배송비는 고객 부담입니다.</p>
+  <hr style="margin: 30px 0;">
+
+  <!-- 문의 유형 선택 -->
+  <div class="inquiry-section">
+    <h2>문의 유형 선택</h2>
+    <div class="inquiry-buttons">
+      <button class="inquiry-btn" onclick="openChat('general')">
+        <span class="inquiry-icon">💬</span>
+        <span class="inquiry-text">일반 문의</span>
+      </button>
+      <button class="inquiry-btn" onclick="openChat('verification')">
+        <span class="inquiry-icon">🔍</span>
+        <span class="inquiry-text">검증 문의</span>
+      </button>
+      <button class="inquiry-btn" onclick="openChat('payment')">
+        <span class="inquiry-icon">💰</span>
+        <span class="inquiry-text">입금 문의</span>
+      </button>
     </div>
   </div>
-
-  <div class="faq-item">
-    <div class="faq-question" onclick="toggleFaq(this)">
-      <span>💳 결제 방법은 무엇이 있나요?</span>
-      <span class="faq-toggle">+</span>
-    </div>
-    <div class="faq-answer">
-      <p>카카오페이, 카드결제, 비트코인 등 다양한 결제 방법을 지원합니다. 주문서 작성 페이지에서 원하시는 결제 방법을 선택하실 수 있습니다.</p>
-    </div>
-  </div>
-</div>
-
-<hr>
-
-<!-- 문의 유형 선택 -->
-<div class="inquiry-section">
-  <h2>문의 유형 선택</h2>
-  <div class="inquiry-buttons">
-    <button class="inquiry-btn" onclick="openChat('product')">
-      <span class="inquiry-icon">🛍</span>
-      <span class="inquiry-text">상품 문의</span>
-    </button>
-    <button class="inquiry-btn" onclick="openChat('delivery')">
-      <span class="inquiry-icon">📦</span>
-      <span class="inquiry-text">배송 문의</span>
-    </button>
-    <button class="inquiry-btn" onclick="openChat('consultant')">
-      <span class="inquiry-icon">👤</span>
-      <span class="inquiry-text">상담원 연결</span>
-    </button>
-  </div>
-</div>
+</main>
 
 <!-- 채팅 모달 -->
 <div id="chatModal" class="chat-modal">
@@ -119,36 +174,30 @@
     <div class="chat-body" id="chatBody">
       <div class="chat-message bot-message">
         <div class="message-content">
-          <p>안녕하세요! IAN SHOP 고객 상담입니다. 무엇을 도와드릴까요? 😊</p>
+          <p>안녕하세요! 이안티켓 고객 상담입니다. 무엇을 도와드릴까요? 😊</p>
         </div>
         <div class="message-time"></div>
       </div>
     </div>
     <div class="chat-input-area">
       <div class="quick-buttons" id="quickButtons">
-        <button class="quick-btn" onclick="sendQuickMessage('상품 사이즈 문의')">사이즈 문의</button>
-        <button class="quick-btn" onclick="sendQuickMessage('배송 일정 문의')">배송 일정</button>
-        <button class="quick-btn" onclick="sendQuickMessage('교환/반품 문의')">교환/반품</button>
+        <button class="quick-btn" onclick="sendQuickMessage('입금 일정 문의')">입금 일정</button>
+        <button class="quick-btn" onclick="sendQuickMessage('검증 상태 문의')">검증 상태</button>
+        <button class="quick-btn" onclick="sendQuickMessage('상품권 종류 문의')">상품권 종류</button>
       </div>
       <div class="chat-input-container">
         <input type="text" id="chatInput" placeholder="메시지를 입력하세요..." onkeypress="handleChatKeyPress(event)">
         <button onclick="sendMessage()" class="send-btn">전송</button>
       </div>
       <div class="chat-info">
-        <p>💡 텔레그램 봇(@ianshopbot)으로도 문의하실 수 있습니다.</p>
-        <a href="https://t.me/ianshopbot" target="_blank" class="telegram-link">텔레그램 봇 열기</a>
+        <p>💡 카카오톡으로도 문의하실 수 있습니다.</p>
+        <p style="font-size: 0.85em; color: #666;">카카오톡: 이안티켓 고객센터</p>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// 텔레그램 WebApp 초기화
-if (window.Telegram && window.Telegram.WebApp) {
-  window.Telegram.WebApp.ready();
-  window.Telegram.WebApp.expand();
-}
-
 // FAQ 토글
 function toggleFaq(element) {
   const faqItem = element.parentElement;
@@ -181,20 +230,18 @@ function openChat(type) {
   const chatTitle = document.getElementById('chatTitle');
   const chatBody = document.getElementById('chatBody');
   
-  // 문의 유형에 따른 제목 설정
   const titles = {
-    'product': '🛍 상품 문의',
-    'delivery': '📦 배송 문의',
-    'consultant': '👤 상담원 연결'
+    'general': '💬 일반 문의',
+    'verification': '🔍 검증 문의',
+    'payment': '💰 입금 문의'
   };
   
   chatTitle.textContent = titles[type] || '고객 상담';
   
-  // 초기 메시지 설정
   const initialMessages = {
-    'product': '상품 문의를 도와드리겠습니다. 어떤 상품에 대해 궁금하신가요?',
-    'delivery': '배송 문의를 도와드리겠습니다. 배송 일정이나 배송비에 대해 문의해주세요.',
-    'consultant': '상담원 연결을 도와드리겠습니다. 상담원: @ianparka (상담 시간: 오전 9시 ~ 오후 6시)'
+    'general': '일반 문의를 도와드리겠습니다. 무엇이 궁금하신가요?',
+    'verification': '검증 문의를 도와드리겠습니다. 상품권 검증 상태나 문제에 대해 문의해주세요.',
+    'payment': '입금 문의를 도와드리겠습니다. 입금 일정이나 계좌 정보에 대해 문의해주세요.'
   };
   
   chatBody.innerHTML = `
@@ -209,7 +256,6 @@ function openChat(type) {
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
   
-  // 입력 필드 포커스
   setTimeout(() => {
     document.getElementById('chatInput').focus();
   }, 100);
@@ -231,7 +277,6 @@ function sendMessage() {
   
   const chatBody = document.getElementById('chatBody');
   
-  // 사용자 메시지 추가
   const userMessage = document.createElement('div');
   userMessage.className = 'chat-message user-message';
   userMessage.innerHTML = `
@@ -242,13 +287,9 @@ function sendMessage() {
   `;
   chatBody.appendChild(userMessage);
   
-  // 입력 필드 초기화
   input.value = '';
-  
-  // 스크롤 하단으로
   chatBody.scrollTop = chatBody.scrollHeight;
   
-  // 봇 응답 시뮬레이션 (실제로는 텔레그램 봇 API와 연동)
   setTimeout(() => {
     const botResponse = getBotResponse(message);
     const botMessage = document.createElement('div');
@@ -277,23 +318,20 @@ function handleChatKeyPress(event) {
   }
 }
 
-// 봇 응답 생성 (실제로는 텔레그램 봇 API와 연동)
+// 봇 응답 생성
 function getBotResponse(message) {
   const lowerMessage = message.toLowerCase();
   
-  // 키워드 기반 응답
-  if (lowerMessage.includes('사이즈') || lowerMessage.includes('크기')) {
-    return '사이즈는 S, M, L, XL이 있습니다. 각 상품 상세 페이지에서 사이즈 가이드를 확인하실 수 있습니다.';
-  } else if (lowerMessage.includes('배송') || lowerMessage.includes('언제')) {
-    return '결제 완료 후 평균 2~3영업일 내 배송됩니다. 주말 및 공휴일은 제외됩니다.';
-  } else if (lowerMessage.includes('교환') || lowerMessage.includes('반품')) {
-    return '상품 수령 후 7일 이내에 교환/반품 신청이 가능합니다. 자세한 내용은 상담원에게 문의해주세요.';
-  } else if (lowerMessage.includes('가격') || lowerMessage.includes('비용')) {
-    return '각 상품의 가격은 상품 페이지에서 확인하실 수 있습니다. 추가 할인이나 쿠폰은 장바구니에서 적용 가능합니다.';
-  } else if (lowerMessage.includes('상담원') || lowerMessage.includes('직원')) {
-    return '상담원: @ianparka\n상담 시간: 오전 9시 ~ 오후 6시\n상담 시간 외에는 답변이 지연될 수 있습니다.';
+  if (lowerMessage.includes('입금') || lowerMessage.includes('돈') || lowerMessage.includes('계좌')) {
+    return '입금은 상품권 검증 완료 후 1~2일 내 처리됩니다. 영업일 기준으로 처리되며, 주말 및 공휴일은 제외됩니다. 입금 정보는 신청 시 입력하신 계좌로 자동 입금됩니다.';
+  } else if (lowerMessage.includes('검증') || lowerMessage.includes('확인')) {
+    return '상품권 검증은 평균 1~2시간 내 완료됩니다. 검증 상태는 "내 주문조회"에서 확인하실 수 있습니다. 검증이 지연되는 경우 고객센터로 문의해주세요.';
+  } else if (lowerMessage.includes('시세') || lowerMessage.includes('가격') || lowerMessage.includes('비율')) {
+    return '상품권 종류에 따라 매입 시세가 다릅니다. 컬쳐랜드, 문화상품권 등은 90%, 롯데모바일, 신세계모바일상품권은 93%, 스타벅스는 85%입니다. 정확한 시세는 메인 페이지에서 확인하실 수 있습니다.';
+  } else if (lowerMessage.includes('상품권') || lowerMessage.includes('종류')) {
+    return '컬쳐랜드 상품권, 문화상품권, 북앤라이프, 틴캐시, 롯데모바일 교환권, 구글 교환권, 스타벅스 e카드/기프트카드, 신세계모바일상품권 등을 매입하고 있습니다.';
   } else {
-    return '문의 감사합니다. 더 자세한 내용은 상담원(@ianparka)에게 직접 문의하시거나, 텔레그램 봇(@ianshopbot)을 이용해주세요.';
+    return '문의 감사합니다. 더 자세한 내용은 카카오톡으로 문의주시거나, 고객센터(010-4227-8889)로 연락주세요.';
   }
 }
 
@@ -320,6 +358,50 @@ document.addEventListener('keydown', function(event) {
   }
 });
 </script>
+
+<style>
+.notice-section {
+  margin-bottom: 30px;
+}
+
+.notice-section h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5em;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notice-item {
+  padding: 15px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.notice-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.notice-title {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.notice-date {
+  font-size: 0.85em;
+  color: #666;
+}
+</style>
 
 </body>
 </html>
